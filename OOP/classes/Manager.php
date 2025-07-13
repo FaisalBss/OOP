@@ -6,10 +6,6 @@ class Manager extends User {
         return true;
     }
 
-    public function isDeveloper() {
-        return false;
-    }
-
     public function getAllEmployees() {
         $users = require __DIR__ . '/../users_data.php';
         return $users;
