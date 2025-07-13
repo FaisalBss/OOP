@@ -6,18 +6,25 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $users = require 'users_data.php';
-    $username = $_POST['username'];
-    $password = $_POST['password'];
 
-    if (isset($users[$username]) && $users[$username]['password'] === $password) {
+    $username = trim($_POST['username'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    
+    if (empty($username) || empty($password)) {
+        $error = "❌ Username and password are required.";
+    } elseif (!isset($users[$username])) {
+        $error = "❌ User not found.";
+    } elseif ($users[$username]['password'] !== $password) {
+        $error = "❌ Incorrect password.";
+    } else {
         $user = UserFactory::create($username, $users[$username]);
         $_SESSION['user'] = serialize($user);
         header("Location: dashboard.php");
-        exit();
-    } else {
-        $error = "❌ Incorrect username or password.";
+        exit;
     }
 }
+
 ?>
 
 
